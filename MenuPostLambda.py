@@ -1,4 +1,4 @@
-from __future__ import print_function 
+from __future__ import print_function # Python 2/3 compatibility
 import boto3
 import json
 import decimal
@@ -15,35 +15,19 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def lambda_handler(event, context):
+    
+ try:    
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 
     table = dynamodb.Table('PizzaDB')
 
     response = table.put_item(
-        Item={
-    "menu_id": "UUID-generated-by-client1",
-    "store_name": "Pizza Hut",
-    "selection": [
-        "Cheese",
-        "Pepperoni"
-    ],
-    "size": [
-        "Slide", "Small", "Medium", "Large", "X-Large"
-    ],
-    "price": [
-        "3.50", "7.00", "10.00", "15.00", "20.00"
-    ],
-    "store_hours": {
-        "Mon": "10am-10pm",
-        "Tue": "10am-10pm",
-        "Wed": "10am-10pm",
-        "Thu": "10am-10pm",
-        "Fri": "10am-10pm",
-        "Sat": "11am-12pm",
-        "Sun": "11am-12pm"
-    }
-}
-)
+        Item=event
 
-    print("PutItem succeeded:")
-    print(json.dumps(response, indent=4, cls=DecimalEncoder))
+        )
+ except Exception,e:
+        return 400, e
+ return 200, "OK"
+
+ print("PutItem succeeded:")
+ print(json.dumps(response, indent=4, cls=DecimalEncoder))
