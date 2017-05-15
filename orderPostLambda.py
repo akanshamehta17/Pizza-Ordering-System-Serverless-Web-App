@@ -1,4 +1,4 @@
-from __future__ import print_function 
+from __future__ import print_function # Python 2/3 compatibility
 import boto3
 import json
 import decimal
@@ -27,12 +27,7 @@ def lambda_handler(event, context):
  
   try:
     resp = table2.put_item(
-    Item={   
-    "menu_id": event["menu_id"],
-    "order_id": "uuid_generated_by_client",
-    "customer_name": "John Smith",
-    "customer_email": "foobar@gmail.com"
-     }
+    Item=event
   
    )
   
@@ -50,6 +45,6 @@ def lambda_handler(event, context):
   except Exception,e:
         return 400, e
   return 200, "OK"
-  return response
+  return resp
   print("PutItem succeeded:")
   print(json.dumps(response, indent=4, cls=DecimalEncoder))
